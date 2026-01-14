@@ -42,32 +42,8 @@ pip install -e .
 ```
 
 
-## Quick Start
-```python
-import scanpy as sc
-import stea
-
-# 1) Load data and marker panel
-adata = sc.read_h5ad("input_data.h5ad")
-genesets = {
-    "T_cell": ["CD3D", "CD3E", "CD8A"],
-    "B_cell": ["MS4A1", "CD79A", "CD74"]
-}
-
-# 2) Run the high-level STEA pipeline
-results = stea.stea(adata, genesets, folder="analysis_output")
-
-# 3) Access results
-marker_tables = results["marker_ranks"]       # dict[celltype] -> DataFrame
-enrichment_scores = results["enrichment_scores"]  # DataFrame (gene sets x cells)
-```
-Running `stea.stea` orchestrates QC, marker ranking and scGSEA in one directory while keeping your original working directory intact.
-
 
 ## Tips & Troubleshooting
 - Ensure `adata.X` still contains raw counts before calling `qcplot`; it will log-transform data if necessary and store a copy in `adata.layers['counts']` when absent.
 - For KL-based functions, large `num_permutations` values improve stability but increase runtime; start with 500–1000 and scale up as needed.
 - The cosine similarity helper materializes dense matrices; for very large datasets consider subsetting genes or converting to dense only for the genes of interest.
-
-
-Happy analyzing!
