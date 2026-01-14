@@ -14,7 +14,7 @@ pip install scanpy pandas numpy seaborn matplotlib scipy scikit-learn statsmodel
 ```
 
 ### Conda Environment Setup
-Prefer Conda? Create an isolated env, install core scientific stacks via `conda-forge`, then fall back to pip for anything missing:
+Create an isolated env, install core scientific stacks via `conda-forge`, then fall back to pip for anything missing:
 ```bash
 # 1) Create and activate the environment
 conda create -n stea python=3.10 -c conda-forge
