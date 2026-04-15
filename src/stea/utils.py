@@ -287,11 +287,22 @@ def stgsea(adata, genesets, alpha=0.25, norm=False, folder="03.ES"):
     es = pd.DataFrame(es, index=list(genesets.keys()), columns=adata.obs_names)
     
     es.to_csv(folder+"/stgsea.csv")
-    max_rows = es.idxmax().to_frame()
-    max_rows.columns = ['celltype']
-    max_rows.to_csv(folder+"/celltype_prediction.csv")
 
-    return max_rows
+    # Keep all tied top labels for each cell (column).
+    predictions = []
+    for cell in es.columns:
+        col = es[cell]
+        top_score = col.max()
+        top_labels = col.index[col == top_score].tolist()
+        predictions.append({
+            "cell": cell,
+            "celltype": ";".join(top_labels),
+        })
+
+    prediction_df = pd.DataFrame(predictions).set_index("cell")
+    prediction_df.to_csv(folder+"/celltype_prediction.csv")
+
+    return prediction_df
 
 
 def calculate_gene_cosine_similarity(adata, target_gene, top_n=None, folder="04.CosineSimilarity"):
